@@ -68,3 +68,23 @@ def get_db() -> MySQLConnection:
         host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
         database=os.getenv("PERSONAL_DATA_DB_NAME")
     )
+
+
+def main() -> None:
+    """Main function to fetch and log user data with sensitive fields redacted."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+
+    field_names = [desc[0] for desc in cursor.description]
+    for row in cursor:
+        message = "; ".join(f"{k}={v}" for k, v in zip(field_names, row)) + ";"
+        logger.info(message)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
