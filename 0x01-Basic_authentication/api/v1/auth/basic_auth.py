@@ -7,6 +7,7 @@ from typing import TypeVar
 from models.user import User
 
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -113,3 +114,25 @@ class BasicAuth(Auth):
             return None
 
         return user
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Retrieve the User instance based on the request using Basic Auth.
+        """
+        header = self.authorization_header(request)
+        if header is None:
+            return None
+
+        base64_part = self.extract_base64_authorization_header(header)
+        if base64_part is None:
+            return None
+
+        decoded = self.decode_base64_authorization_header(base64_part)
+        if decoded is None:
+            return None
+
+        email, password = self.extract_user_credentials(decoded)
+        if email is None or password is None:
+            return None
+
+        return self.user_object_from_credentials(email, password)
