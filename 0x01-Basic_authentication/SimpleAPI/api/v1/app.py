@@ -16,7 +16,7 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 auth = None
-auth = Auht()
+auth = Auth()
 
 
 @app.errorhandler(404)
