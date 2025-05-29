@@ -2,6 +2,7 @@
 """Authentication model
 """
 
+import os
 from flask import request
 from typing import List, TypeVar
 
@@ -48,3 +49,11 @@ class Auth():
         """Gets the current user
         """
         return None
+
+    def session_cookie(self, request=None):
+        """Gets a cookie value from a request
+        """
+        if not request:
+            return None
+        session_name = os.getenv('SESSION_NAME')
+        return request.cookies.get(session_name)
