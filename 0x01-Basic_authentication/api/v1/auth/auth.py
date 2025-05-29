@@ -15,10 +15,10 @@ class Auth():
         if path is None or excluded_paths is None:
             return True
 
-        if path.endswith('/'):
-            path += '/'
+        normalized_paths = {path.rstrip('/') for path in excluded_paths}
+        path = path.rstrip('/')
 
-        for excluded_path in excluded_paths:
+        for excluded_path in normalized_paths:
             if excluded_path is None:
                 continue
 
@@ -28,9 +28,6 @@ class Auth():
                 if path.startswith(base):
                     return False
             else:
-                # Normalize and compare both with and without trailing slash
-                if not excluded_path.endswith('/'):
-                    excluded_path += '/'
                 if path == excluded_path:
                     return False
 
