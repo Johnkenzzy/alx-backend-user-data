@@ -16,16 +16,23 @@ class Auth():
             return True
 
         if path.endswith('/'):
-            if path in excluded_paths:
-                return False
-            p_len: int = len(path)
-            if path[:p_len - 1] in excluded_paths:
-                return False
-        else:
-            if path in excluded_paths:
-                return False
-            if path + '/' in excluded_paths:
-                return False
+            path += '/'
+
+        for excluded_path in excluded_paths:
+            if excluded_path is None:
+                continue
+
+            if excluded_path.endswith('*'):
+                # Wildcard match: check if path starts with the base pattern
+                base = excluded_path[:-1]
+                if path.startswith(base):
+                    return False
+            else:
+                # Normalize and compare both with and without trailing slash
+                if not excluded_path.endswith('/'):
+                    excluded_path += '/'
+                if path == excluded_path:
+                    return False
 
         return True
 
