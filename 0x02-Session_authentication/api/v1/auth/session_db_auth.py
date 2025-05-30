@@ -10,7 +10,7 @@ class SessionDBAuth(SessionExpAuth):
     """Session authentication using database storage
     """
 
-    def create_session(self, user_id: = None) -> str:
+    def create_session(self, user_id: str = None) -> str:
         """Create and persist a new session
         """
         session_id = super().create_session(user_id)
