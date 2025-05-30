@@ -4,7 +4,6 @@
 
 from api.v1.auth.session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
-from models import storage
 
 
 class SessionDBAuth(SessionExpAuth):
@@ -39,12 +38,16 @@ class SessionDBAuth(SessionExpAuth):
         """
         if request is None:
             return False
+
         session_id = self.session_cookie(request)
         if session_id is None:
             return False
-        sessions = storage.search(UserSession)
-        for session in sessions:
-            if session.session_id == session_id:
-                storage.delete(session)
-                return True
-        return False
+
+        UserSession.load_from_file()
+        sessions = UserSession.search({'session_id': session_id})
+        if not sessions:
+            return False
+
+        session = sessions[0]
+        session.remove()
+        return True
