@@ -58,7 +58,7 @@ class DB:
         return user
 
     def update_user(self, user_id: str, **kwargs) -> None:
-        """Update user detail
+        """Update user details
         """
         user: User = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
@@ -66,4 +66,3 @@ class DB:
                 raise ValueError()
             setattr(user, key, value)
         self._session.commit()
-        return
