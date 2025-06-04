@@ -3,6 +3,7 @@
 """
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+
 Base = declarative_base()
 
 
@@ -14,4 +15,4 @@ class User(Base):
     email = Column(String(250))
     hashed_password = Column(String(250))
     session_id = Column(String(250))
-    reset_token = Column(String(20), nullable=True)
+    reset_token = Column(String(250), nullable=True)
