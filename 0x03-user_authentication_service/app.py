@@ -3,25 +3,25 @@
 Route module for the API
 """
 
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, make_response, Response
 from typing import Optional
 
 from auth import Auth
 from user import User
 
 app: Flask = Flask(__name__)
-AUTH = Auth()
+AUTH: Auth = Auth()
 
 
 @app.route('/', methods=['GET'])
-def index():
+def index() -> str:
     """App index view
     """
     return jsonify({"message": "Bienvenue"})
 
 
 @app.route('/users', methods=['POST'])
-def user():
+def user() -> str:
     """Register a new user
     """
     email: Optional[str] = request.form.get('email')
@@ -33,6 +33,24 @@ def user():
         )
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'])
+def login() -> Response:
+    """Login a user
+    """
+    email: Optional[str] = request.form.get('email')
+    password: Optional[str] = request.form.get('password')
+    if AUTH.valid_login(email, password):
+        session_id: Optional[str] = AUTH.create_session(email)
+        resp: Response = make_response(
+            jsonify(
+                {"email": email, "message": "logged in"}
+            )
+        )
+        resp.set_cookie('session_id', session_id)
+        return resp
+    abort(401)
 
 
 if __name__ == "__main__":
