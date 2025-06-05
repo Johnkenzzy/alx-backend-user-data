@@ -3,6 +3,7 @@
 """
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
+from typing import Optional
 
 from db import DB
 from user import User
@@ -60,3 +61,12 @@ class Auth:
             return session_id
         except Exception:
             pass
+
+    def get_user_from_session(self, session_id: str) -> Optional[User]:
+        """Retrieves the user of a session
+        """
+        try:
+            user: User = self._db.find_user_by(session_id=session_id)
+            return user
+        except Exception:
+            return None
