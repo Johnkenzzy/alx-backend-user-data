@@ -75,7 +75,7 @@ def profile() -> Response:
     session_id: Optional[str] = request.cookies.get('session_id')
     user: Optional[User] = AUTH.get_user_from_session_id(session_id)
     if user:
-        return make_response(jsonify({"email": user.email}), 200)
+        return jsonify({"email": user.email}), 200
     abort(403)
 
 
