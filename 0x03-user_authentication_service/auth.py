@@ -62,7 +62,7 @@ class Auth:
         except Exception:
             pass
 
-    def get_user_from_session(self, session_id: str) -> Optional[User]:
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
         """Retrieves the user of a session
         """
         try:
