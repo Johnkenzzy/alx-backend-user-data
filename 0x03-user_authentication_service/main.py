@@ -13,9 +13,9 @@ def register_user(email: str, password: str) -> None:
         f"{BASE_URL}/users", data={"email": email, "password": password}
     )
     if resp.status_code == 200:
-        print("User registered successfully.")
+        pass
     elif resp.status_code == 400 and "already registered" in resp.text:
-        print("User already registered.")
+        pass
     else:
         assert False, f"Unexpected registration response: {resp.status_code} - {resp.text}"
 
@@ -56,7 +56,7 @@ def log_out(session_id: str) -> None:
     """Test user logout."""
     cookies = {"session_id": session_id}
     resp = requests.delete(f"{BASE_URL}/sessions", cookies=cookies)
-    assert resp.status_code == 302  # Redirect to /
+    assert resp.status_code == 200  # Redirect to /
 
 
 def reset_password_token(email: str) -> str:
