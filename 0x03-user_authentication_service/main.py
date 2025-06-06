@@ -17,7 +17,9 @@ def register_user(email: str, password: str) -> None:
     elif resp.status_code == 400 and "already registered" in resp.text:
         pass
     else:
-        assert False, f"Unexpected registration response: {resp.status_code} - {resp.text}"
+        stat = {resp.status_code} - {resp.text}
+        text = f"Unexpected registration response: {stat}"
+        assert False, text
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
